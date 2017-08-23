@@ -15,8 +15,8 @@ protocol ModelFormViewModelType {
   
   // INPUTS
   
-  var id: PublishSubject<String> { get }
-  var name: PublishSubject<String> { get }
+  var id: BehaviorSubject<String> { get }
+  var name: BehaviorSubject<String> { get }
   
   // OUTPUTS
   
@@ -34,6 +34,7 @@ protocol ModelFormViewModelType {
   var numberOfProperties: Int { get }
   var properties: [Property] { get }
   func selectProperty(atIndex: Int)
+  func clearProperty()
   
   init(exodiaInteractor: ExodiaInteractorType)
 }
@@ -44,15 +45,15 @@ struct ModelFormViewModel: ModelFormViewModelType {
   
   let disposeBag = DisposeBag()
   
-  var id = PublishSubject<String>()
-  var name = PublishSubject<String>()
+  var id = BehaviorSubject<String>(value: "")
+  var name = BehaviorSubject<String>(value: "")
   
   var data: Observable<(String, String)> {
     return Observable.combineLatest(id, name)
   }
   
   var saveEnabled: Driver<Bool> {
-    return Observable.combineLatest(id.asObservable(), name.asObservable())      
+    return Observable.combineLatest(id.asObservable(), name.asObservable())
       .map({ $0.trimmingCharacters(in: .whitespacesAndNewlines) != "" && $1.trimmingCharacters(in: .whitespacesAndNewlines) != "" })
       .startWith(false)
       .asDriver(onErrorJustReturn: false)
@@ -82,7 +83,7 @@ struct ModelFormViewModel: ModelFormViewModelType {
       let update = Observable.just(data)
         .filter({ [exodiaInteractor = exodiaInteractor] _ in exodiaInteractor.currentModel.value != nil })
         .flatMapLatest(exodiaInteractor.updateModel(withID: andName:))
-
+      
       return Observable.from([create, update])
         .merge()
     }
@@ -126,5 +127,9 @@ struct ModelFormViewModel: ModelFormViewModelType {
   func selectProperty(atIndex index: Int) {
     
     exodiaInteractor.selectProperty(atIndex: index)
+  }
+  
+  func clearProperty() {
+    exodiaInteractor.clearProperty()
   }
 }

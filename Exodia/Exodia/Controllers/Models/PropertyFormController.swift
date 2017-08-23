@@ -39,27 +39,31 @@ class PropertyFormController: NSViewController {
     
     if let controller = segue.destinationController as? NSViewController {
       MainBuilder.build(controller: controller)
-    }
+    }    
   }
   
   func setup() {
     
     idTextField.rx.text
+      .skip(1)
       .filterNil()
       .bind(to: viewModel.id)
       .addDisposableTo(disposeBag)
     
     viewModel.id
+      .debug()
       .distinctUntilChanged()
       .bind(to: idTextField.rx.text)
       .addDisposableTo(disposeBag)
     
     nameTextField.rx.text
+      .skip(1)
       .filterNil()
       .bind(to: viewModel.name)
       .addDisposableTo(disposeBag)
     
     viewModel.name
+      .debug()
       .distinctUntilChanged()
       .bind(to: nameTextField.rx.text)
       .addDisposableTo(disposeBag)

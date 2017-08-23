@@ -23,10 +23,18 @@ enum MainBuilder {
     type(forController: controller)?.build(controller: controller)
   }
   
-  private func build(controller: NSViewController) {
+  static func exodia() -> ExodiaInteractorType {
     
     DispatchQueue.once(token: "__ASSEMBLY__") {
       assembly()
+    }
+    return container.resolve(ExodiaInteractorType.self)!
+  }
+  
+  private func build(controller: NSViewController) {
+    
+    DispatchQueue.once(token: "__ASSEMBLY__") {
+      MainBuilder.assembly()
     }
     
     switch self {
@@ -68,7 +76,7 @@ enum MainBuilder {
     (controller as! PropertyFormController).viewModel = container.resolve(PropertyFormViewModelType.self)!
   }
   
-  private func assembly() {
+  private static func assembly() {
     
     container.autoregister(ModelListViewModelType.self, initializer: ModelListViewModel.init)
     container.autoregister(ModelFormViewModelType.self, initializer: ModelFormViewModel.init)

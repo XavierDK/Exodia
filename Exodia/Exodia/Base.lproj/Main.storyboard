@@ -997,7 +997,7 @@
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
                                                         <connections>
-                                                            <segue destination="zsm-dk-Lxd" kind="show" id="MBn-7w-uTY"/>
+                                                            <segue destination="zsm-dk-Lxd" kind="modal" identifier="SegueNewPropertyForm" id="MBn-7w-uTY"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
@@ -1300,6 +1300,7 @@
                         <outlet property="newButton" destination="BJe-Xg-7qA" id="VsO-Uq-0xd"/>
                         <outlet property="tableView" destination="pd6-NB-zwZ" id="Osq-o0-tsG"/>
                         <outlet property="validateButton" destination="7sF-E6-32J" id="g70-RZ-mVQ"/>
+                        <segue destination="zsm-dk-Lxd" kind="modal" identifier="SegueUpdatePropertyForm" id="M6h-Vl-vJ5"/>
                     </connections>
                 </viewController>
                 <customObject id="d84-Fl-Wdq" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -1573,10 +1574,13 @@
                 </viewController>
                 <customObject id="Mqc-yq-Ta0" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1936" y="271"/>
+            <point key="canvasLocation" x="2044" y="271"/>
         </scene>
     </scenes>
     <resources>
         <image name="NSAddTemplate" width="11" height="11"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="M6h-Vl-vJ5"/>
+    </inferredMetricsTieBreakers>
 </document>

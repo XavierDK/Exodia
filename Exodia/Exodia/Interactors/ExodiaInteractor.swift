@@ -15,6 +15,8 @@ protocol ExodiaInteractorType {
   
   init(configFileService: ConfigFileServiceType)
   
+  func generateJSON() -> String?
+  
   var currentModel: Variable<Model?> { get }
   var numberOfModels: Int { get }
   var models: [Model] { get }
@@ -32,6 +34,7 @@ protocol ExodiaInteractorType {
   func createProperty(withID ID: String, andName name: String) -> Observable<Property>
   func updateProperty(withID ID: String, andName name: String) -> Observable<Property>
   func selectProperty(atIndex index: Int)
+  func clearProperty()
 }
 
 struct ExodiaInteractor: ExodiaInteractorType {
@@ -46,6 +49,10 @@ struct ExodiaInteractor: ExodiaInteractorType {
   init(configFileService: ConfigFileServiceType) {
     
     self.configFileService = configFileService
+  }
+  
+  func generateJSON() -> String? {
+    return exodia.value.toJSONString()
   }
 }
 
@@ -66,6 +73,7 @@ extension ExodiaInteractor {
       var model = Model()
       model.id = ID
       model.name = name
+      model.properties = self.currentModel.value?.properties ?? []
       
       let exodia = self.exodia.value
       
@@ -87,6 +95,7 @@ extension ExodiaInteractor {
       var model = Model()
       model.id = ID
       model.name = name
+      model.properties = self.currentModel.value?.properties ?? []
       
       let exodia = self.exodia.value
       
@@ -208,7 +217,7 @@ extension ExodiaInteractor {
     return Observable.create({ observer in
       
       var model = self.currentModel.value
-      let index = model?.properties.index { $0.id == model?.id }
+      let index = model?.properties.index { $0.id == self.currentProperty.value?.id }
       
       if let index = index {
         model?.properties.remove(at: index)
@@ -222,5 +231,9 @@ extension ExodiaInteractor {
       
       return Disposables.create()
     })
+  }
+  
+  func clearProperty() {
+    self.currentProperty.value = nil
   }
 }

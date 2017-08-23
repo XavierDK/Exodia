@@ -44,7 +44,9 @@ class RootViewController: NSTabViewController {
         let strURL = url.absoluteString + ".json"
         print(strURL)
         
-        try? "prout".data(using: .utf8)?.write(to: URL(string: strURL)!)
+        if let json = MainBuilder.exodia().generateJSON() {
+          try? json.data(using: .utf8)?.write(to: URL(string: strURL)!)
+        }
       }
     }
   }

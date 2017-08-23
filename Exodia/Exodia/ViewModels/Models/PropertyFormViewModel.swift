@@ -15,8 +15,8 @@ protocol PropertyFormViewModelType {
   
   // INPUTS
   
-  var id: PublishSubject<String> { get }
-  var name: PublishSubject<String> { get }
+  var id: BehaviorSubject<String> { get }
+  var name: BehaviorSubject<String> { get }
   
   // OUTPUTS
   
@@ -38,8 +38,8 @@ struct PropertyFormViewModel: PropertyFormViewModelType {
   
   let disposeBag = DisposeBag()
   
-  var id = PublishSubject<String>()
-  var name = PublishSubject<String>()
+  var id = BehaviorSubject<String>(value: "")
+  var name = BehaviorSubject<String>(value: "")
   
   var data: Observable<(String, String)> {
     return Observable.combineLatest(id, name)
@@ -65,7 +65,7 @@ struct PropertyFormViewModel: PropertyFormViewModelType {
   
   init(exodiaInteractor: ExodiaInteractorType) {
     
-    self.exodiaInteractor = exodiaInteractor
+    self.exodiaInteractor = exodiaInteractor    
     
     saveModelAction = Action<(String, String), Property> { [exodiaInteractor = exodiaInteractor] data in
       

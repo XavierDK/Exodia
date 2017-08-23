@@ -25,6 +25,9 @@ class ModelFormController: NSViewController {
   @IBOutlet weak var newButton: NSButton!
   @IBOutlet weak var deleteButton: NSButton!
   
+  let segueNewPropertyForm = "SegueNewPropertyForm"
+  let segueUpdatePropertyForm = "SegueUpdatePropertyForm"
+  
   override func viewDidLoad() {
     super.viewDidLoad()
   }
@@ -41,6 +44,10 @@ class ModelFormController: NSViewController {
     
     if let controller = segue.destinationController as? NSViewController {
       MainBuilder.build(controller: controller)
+    }
+    
+    if segue.identifier == segueNewPropertyForm {
+      viewModel.clearProperty()
     }
   }
   
@@ -136,5 +143,6 @@ extension ModelFormController: NSTableViewDataSource, NSTableViewDelegate {
     }
     
     viewModel.selectProperty(atIndex: tableView.selectedRow)
+    self.performSegue(withIdentifier: segueUpdatePropertyForm, sender: nil)
   }
 }
