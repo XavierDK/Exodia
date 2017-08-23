@@ -1,0 +1,6 @@
+framework module Pods_Exodia {
+  umbrella header "Pods-Exodia-umbrella.h"
+
+  export *
+  module * { export * }
+}
