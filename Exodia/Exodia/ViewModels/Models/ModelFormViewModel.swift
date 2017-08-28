@@ -14,18 +14,18 @@ import Action
 protocol ModelFormViewModelType {
   
   // INPUTS
-  
   var id: BehaviorSubject<String> { get }
   var name: BehaviorSubject<String> { get }
+  var hasRealm: BehaviorSubject<Bool> { get }
+  var isClass: BehaviorSubject<Bool> { get }
   
   // OUTPUTS
-  
-  var data: Observable<(String, String)> { get }
+  var data: Observable<(String, String, Bool, Bool)> { get }
   var saveEnabled: Driver<Bool> { get }
   var deleteEnabled: Driver<Bool> { get }
   
   // ACTIONS
-  var saveModelAction: Action<(String, String), Model> { get }
+  var saveModelAction: Action<(String, String, Bool, Bool), Model> { get }
   var newModelAction: CocoaAction { get }
   var deleteModelAction: CocoaAction { get }
   
@@ -47,9 +47,11 @@ struct ModelFormViewModel: ModelFormViewModelType {
   
   var id = BehaviorSubject<String>(value: "")
   var name = BehaviorSubject<String>(value: "")
+  var hasRealm = BehaviorSubject<Bool>(value: false)
+  var isClass = BehaviorSubject<Bool>(value: false)
   
-  var data: Observable<(String, String)> {
-    return Observable.combineLatest(id, name)
+  var data: Observable<(String, String, Bool, Bool)> {
+    return Observable.combineLatest(id, name, isClass, hasRealm)
   }
   
   var saveEnabled: Driver<Bool> {
@@ -66,7 +68,7 @@ struct ModelFormViewModel: ModelFormViewModelType {
       .asDriver(onErrorJustReturn: false)
   }
   
-  let saveModelAction: Action<(String, String), Model>
+  let saveModelAction: Action<(String, String, Bool, Bool), Model>
   let newModelAction: CocoaAction
   let deleteModelAction: CocoaAction
   
@@ -74,15 +76,15 @@ struct ModelFormViewModel: ModelFormViewModelType {
     
     self.exodiaInteractor = exodiaInteractor
     
-    saveModelAction = Action<(String, String), Model> { [exodiaInteractor = exodiaInteractor] data in
+    saveModelAction = Action<(String, String, Bool, Bool), Model> { [exodiaInteractor = exodiaInteractor] data in
       
       let create = Observable.just(data)
         .filter({ [exodiaInteractor = exodiaInteractor] _ in exodiaInteractor.currentModel.value == nil })
-        .flatMapLatest(exodiaInteractor.createModel(withID: andName:))
+        .flatMapLatest(exodiaInteractor.createModel(withID: andName: isClass: hasRealm:))
       
       let update = Observable.just(data)
         .filter({ [exodiaInteractor = exodiaInteractor] _ in exodiaInteractor.currentModel.value != nil })
-        .flatMapLatest(exodiaInteractor.updateModel(withID: andName:))
+        .flatMapLatest(exodiaInteractor.updateModel(withID: andName: isClass: hasRealm:))
       
       return Observable.from([create, update])
         .merge()
@@ -107,6 +109,28 @@ struct ModelFormViewModel: ModelFormViewModelType {
       .asObservable()
       .map({ $0?.name ?? "" })
       .bind(to: name)
+      .addDisposableTo(disposeBag)
+    
+    exodiaInteractor.currentModel
+      .asObservable()
+      .map({ $0?.hasRealm ?? false })
+      .bind(to: hasRealm)
+      .addDisposableTo(disposeBag)
+    
+    exodiaInteractor.currentModel
+      .asObservable()
+      .map({ $0?.isClass ?? false })
+      .bind(to: isClass)
+      .addDisposableTo(disposeBag)
+    
+    exodiaInteractor.currentModel
+      .asObservable()
+      .map({ $0?.id ?? "" })
+      .bind(to: id)
+      .addDisposableTo(disposeBag)
+    
+    name.map({ "__MODEL_" + $0.uppercased() + "__" })
+      .bind(to: id)
       .addDisposableTo(disposeBag)
   }
   

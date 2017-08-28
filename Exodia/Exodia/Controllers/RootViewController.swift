@@ -1,4 +1,4 @@
-//
+
 //  RootViewController.swift
 //  Exodia
 //
@@ -42,13 +42,25 @@ class RootViewController: NSTabViewController {
       if let url = panel.url {
         
         let strURL = url.absoluteString + ".json"
-        print(strURL)
-        
-        if let json = MainBuilder.exodia().generateJSON() {
-          try? json.data(using: .utf8)?.write(to: URL(string: strURL)!)
-        }
+        MainBuilder.exodia().saveJSON(to: strURL)
       }
     }
+  }
+  
+  @IBAction func openDocument(_ sender: NSMenuItem) {
+    
+    let panel = NSOpenPanel()
+    panel.begin { res in
+      
+      if let url = panel.url {
+        MainBuilder.exodia().openJSON(to: url.absoluteString)
+      }
+    }
+  }
+  
+  @IBAction func newDocument(_ sender: NSMenuItem) {
+    
+    MainBuilder.exodia().newProject()
   }
 }
 

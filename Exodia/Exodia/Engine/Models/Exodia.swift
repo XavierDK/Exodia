@@ -12,6 +12,7 @@ import ObjectMapper
 class Exodia: Mappable {
   
   var models: [Model] = []
+  var services: [Service] = []
   
   init() {
     
@@ -23,6 +24,7 @@ class Exodia: Mappable {
   
   func mapping(map: Map) {
     
-    models <- map["models"]
+    models    <- map["models"]
+    services  <- map["services"]
   }
 }

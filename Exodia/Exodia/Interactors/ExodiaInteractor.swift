@@ -13,17 +13,20 @@ protocol ExodiaInteractorType {
   
   var exodia: Variable<Exodia> { get }
   
-  init(configFileService: ConfigFileServiceType)
+  init(generatorService: GeneratorServiceType)
   
-  func generateJSON() -> String?
+  func newProject()
+  func saveJSON(to url: String)
+  func openJSON(to url: String)
+  func generateFiles(to url: String)
   
   var currentModel: Variable<Model?> { get }
   var numberOfModels: Int { get }
   var models: [Model] { get }
   func newModel()
   func deleteModel() -> Observable<Void>
-  func createModel(withID ID: String, andName name: String) -> Observable<Model>
-  func updateModel(withID ID: String, andName name: String) -> Observable<Model>
+  func createModel(withID ID: String, andName name: String, isClass: Bool, hasRealm: Bool) -> Observable<Model>
+  func updateModel(withID ID: String, andName name: String, isClass: Bool, hasRealm: Bool) -> Observable<Model>
   func selectModel(atIndex index: Int)
   
   var currentProperty: Variable<Property?> { get }
@@ -31,28 +34,66 @@ protocol ExodiaInteractorType {
   var properties: [Property] { get }
   func newProperty()
   func deleteProperty() -> Observable<Void>
-  func createProperty(withID ID: String, andName name: String) -> Observable<Property>
-  func updateProperty(withID ID: String, andName name: String) -> Observable<Property>
+  func createProperty(withID ID: String, andName name: String, andType type: String, andKey key: String, andDefaultValue defaultValue: String?) -> Observable<Property>
+  func updateProperty(withID ID: String, andName name: String, andType type: String, andKey key: String, andDefaultValue defaultValue: String?) -> Observable<Property>
   func selectProperty(atIndex index: Int)
   func clearProperty()
+  
+  var currentService: Variable<Service?> { get }
+  var numberOfServices: Int { get }
+  var services: [Service] { get }
+  func newService()
+  func deleteService() -> Observable<Void>
+  func createService(withID ID: String, andName name: String) -> Observable<Service>
+  func updateService(withID ID: String, andName name: String) -> Observable<Service>
+  func selectService(atIndex index: Int)
 }
 
 struct ExodiaInteractor: ExodiaInteractorType {
   
-  let configFileService: ConfigFileServiceType
+  let generatorService: GeneratorServiceType
   
   let exodia = Variable<Exodia>(Exodia())
   
   let currentModel = Variable<Model?>(nil)
   let currentProperty = Variable<Property?>(nil)
+  let currentService = Variable<Service?>(nil)
   
-  init(configFileService: ConfigFileServiceType) {
+  init(generatorService: GeneratorServiceType) {
     
-    self.configFileService = configFileService
+    self.generatorService = generatorService
   }
   
-  func generateJSON() -> String? {
-    return exodia.value.toJSONString()
+  func newProject() {
+    
+    currentModel.value = nil
+    currentProperty.value = nil
+    currentService.value = nil
+    exodia.value = Exodia()
+  }
+  
+  func openJSON(to url: String) {
+    
+    let file = try? Data(contentsOf: URL(string: url)!)
+    
+    if let file = file,
+      let contents = String(data: file, encoding: .utf8),
+      let exodia = Exodia(JSONString: contents){
+      
+      self.exodia.value = exodia
+    }
+  }
+  
+  func saveJSON(to url: String) {
+    
+    if let json = exodia.value.toJSONString() {
+      try? json.data(using: .utf8)?.write(to: URL(string: url)!)
+    }
+  }
+  
+  func generateFiles(to url: String) {
+    
+    generatorService.generate(exodia: exodia.value, to: url)
   }
 }
 
@@ -66,13 +107,15 @@ extension ExodiaInteractor {
     return exodia.value.models
   }
   
-  func createModel(withID ID: String, andName name: String) -> Observable<Model> {
+  func createModel(withID ID: String, andName name: String, isClass: Bool, hasRealm: Bool) -> Observable<Model> {
     
     return Observable.create({ observer in
       
       var model = Model()
       model.id = ID
       model.name = name
+      model.isClass = isClass
+      model.hasRealm = hasRealm
       model.properties = self.currentModel.value?.properties ?? []
       
       let exodia = self.exodia.value
@@ -88,13 +131,15 @@ extension ExodiaInteractor {
     })
   }
   
-  func updateModel(withID ID: String, andName name: String) -> Observable<Model> {
+  func updateModel(withID ID: String, andName name: String, isClass: Bool, hasRealm: Bool) -> Observable<Model> {
     
     return Observable.create({ observer in
       
       var model = Model()
       model.id = ID
       model.name = name
+      model.isClass = isClass
+      model.hasRealm = hasRealm
       model.properties = self.currentModel.value?.properties ?? []
       
       let exodia = self.exodia.value
@@ -127,7 +172,7 @@ extension ExodiaInteractor {
   }
   
   func deleteModel() -> Observable<Void> {
-   
+    
     return Observable.create({ observer in
       
       let exodia = self.exodia.value
@@ -159,7 +204,7 @@ extension ExodiaInteractor {
     return currentModel.value?.properties ?? []
   }
   
-  func createProperty(withID ID: String, andName name: String) -> Observable<Property> {
+  func createProperty(withID ID: String, andName name: String, andType type: String, andKey key: String, andDefaultValue defaultValue: String?) -> Observable<Property> {
     
     return Observable.create({ observer in
       
@@ -167,6 +212,9 @@ extension ExodiaInteractor {
       var property = Property()
       property.id = ID
       property.name = name
+      property.type = type
+      property.key = key
+      property.defaultValue = defaultValue
       model?.properties.append(property)
       self.currentModel.value = model
       self.currentProperty.value = property
@@ -178,13 +226,16 @@ extension ExodiaInteractor {
     })
   }
   
-  func updateProperty(withID ID: String, andName name: String) -> Observable<Property> {
+  func updateProperty(withID ID: String, andName name: String, andType type: String, andKey key: String, andDefaultValue defaultValue: String?) -> Observable<Property> {
     
     return Observable.create({ observer in
       
       var property = Property()
       property.id = ID
       property.name = name
+      property.type = type
+      property.key = key
+      property.defaultValue = defaultValue
       
       let index = self.currentModel.value?.properties.index { $0.id == self.currentProperty.value?.id }
       
@@ -203,12 +254,10 @@ extension ExodiaInteractor {
   }
   
   func selectProperty(atIndex index: Int) {
-    
     currentProperty.value = currentModel.value?.properties[index]
   }
   
   func newProperty() {
-    
     currentProperty.value = nil
   }
   
@@ -237,3 +286,95 @@ extension ExodiaInteractor {
     self.currentProperty.value = nil
   }
 }
+
+extension ExodiaInteractor {
+  
+  var numberOfServices: Int {
+    return exodia.value.services.count
+  }
+  
+  var services: [Service] {
+    return exodia.value.services
+  }
+  
+  func createService(withID ID: String, andName name: String) -> Observable<Service> {
+    
+    return Observable.create({ observer in
+      
+      var service = Service()
+      service.id = ID
+      service.name = name
+      
+      let exodia = self.exodia.value
+      
+      exodia.services.append(service)
+      self.exodia.value = exodia
+      self.currentService.value = service
+      
+      observer.onNext(service)
+      observer.onCompleted()
+      
+      return Disposables.create()
+    })
+  }
+  
+  func updateService(withID ID: String, andName name: String) -> Observable<Service> {
+    
+    return Observable.create({ observer in
+      
+      var service = Service()
+      service.id = ID
+      service.name = name
+      
+      let exodia = self.exodia.value
+      
+      let index = exodia.services.index { $0.id == self.currentService.value?.id }
+      
+      if let index = index {
+        exodia.services.remove(at: index)
+        exodia.services.insert(service, at: index)
+      }
+      
+      self.exodia.value = exodia
+      self.currentService.value = service
+      
+      observer.onNext(service)
+      observer.onCompleted()
+      
+      return Disposables.create()
+    })
+  }
+  
+  func selectService(atIndex index: Int) {
+    
+    currentService.value = exodia.value.services[index]
+  }
+  
+  func newService() {
+    
+    currentService.value = nil
+  }
+  
+  func deleteService() -> Observable<Void> {
+    
+    return Observable.create({ observer in
+      
+      let exodia = self.exodia.value
+      
+      let index = exodia.services.index { $0.id == self.currentService.value?.id }
+      
+      if let index = index {
+        exodia.services.remove(at: index)
+      }
+      
+      self.exodia.value = exodia
+      self.currentService.value = nil
+      
+      observer.onNext(())
+      observer.onCompleted()
+      
+      return Disposables.create()
+    })
+  }
+}
+

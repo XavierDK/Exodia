@@ -17,15 +17,18 @@ protocol PropertyFormViewModelType {
   
   var id: BehaviorSubject<String> { get }
   var name: BehaviorSubject<String> { get }
+  var type: BehaviorSubject<String> { get }
+  var key: BehaviorSubject<String> { get }
+  var defaultValue: BehaviorSubject<String?> { get }
   
   // OUTPUTS
   
-  var data: Observable<(String, String)> { get }
+  var data: Observable<(String, String, String, String, String?)> { get }
   var saveEnabled: Driver<Bool> { get }
   var deleteEnabled: Driver<Bool> { get }
   
   // ACTIONS
-  var saveModelAction: Action<(String, String), Property> { get }
+  var saveModelAction: Action<(String, String, String, String, String?), Property> { get }
   var newModelAction: CocoaAction { get }
   var deleteModelAction: CocoaAction { get }
   
@@ -40,14 +43,22 @@ struct PropertyFormViewModel: PropertyFormViewModelType {
   
   var id = BehaviorSubject<String>(value: "")
   var name = BehaviorSubject<String>(value: "")
+  var type = BehaviorSubject<String>(value: "")
+  var key = BehaviorSubject<String>(value: "")
+  var defaultValue = BehaviorSubject<String?>(value: nil)
   
-  var data: Observable<(String, String)> {
-    return Observable.combineLatest(id, name)
+  var data: Observable<(String, String, String, String, String?)> {
+    return Observable.combineLatest(id, name, type, key, defaultValue)
   }
   
   var saveEnabled: Driver<Bool> {
-    return Observable.combineLatest(id.asObservable(), name.asObservable())
-      .map({ $0.trimmingCharacters(in: .whitespacesAndNewlines) != "" && $1.trimmingCharacters(in: .whitespacesAndNewlines) != "" })
+    return Observable.combineLatest(id.asObservable(), name.asObservable(), type.asObservable(), key.asObservable())
+      .map({
+        $0.trimmingCharacters(in: .whitespacesAndNewlines) != ""
+          && $1.trimmingCharacters(in: .whitespacesAndNewlines) != ""
+          && $2.trimmingCharacters(in: .whitespacesAndNewlines) != ""
+          && $3.trimmingCharacters(in: .whitespacesAndNewlines) != ""
+      })
       .startWith(false)
       .asDriver(onErrorJustReturn: false)
   }
@@ -59,23 +70,23 @@ struct PropertyFormViewModel: PropertyFormViewModelType {
       .asDriver(onErrorJustReturn: false)
   }
   
-  let saveModelAction: Action<(String, String), Property>
+  let saveModelAction: Action<(String, String, String, String, String?), Property>
   let newModelAction: CocoaAction
   let deleteModelAction: CocoaAction
   
   init(exodiaInteractor: ExodiaInteractorType) {
     
-    self.exodiaInteractor = exodiaInteractor    
+    self.exodiaInteractor = exodiaInteractor
     
-    saveModelAction = Action<(String, String), Property> { [exodiaInteractor = exodiaInteractor] data in
+    saveModelAction = Action<(String, String, String, String, String?), Property> { [exodiaInteractor = exodiaInteractor] data in
       
       let create = Observable.just(data)
         .filter({ [exodiaInteractor = exodiaInteractor] _ in exodiaInteractor.currentProperty.value == nil })
-        .flatMapLatest(exodiaInteractor.createProperty(withID: andName:))
+        .flatMapLatest(exodiaInteractor.createProperty(withID: andName: andType: andKey: andDefaultValue:))
       
       let update = Observable.just(data)
         .filter({ [exodiaInteractor = exodiaInteractor] _ in exodiaInteractor.currentProperty.value != nil })
-        .flatMapLatest(exodiaInteractor.updateProperty(withID: andName:))
+        .flatMapLatest(exodiaInteractor.updateProperty(withID: andName: andType: andKey: andDefaultValue:))
       
       return Observable.from([create, update])
         .merge()
@@ -100,6 +111,30 @@ struct PropertyFormViewModel: PropertyFormViewModelType {
       .asObservable()
       .map({ $0?.name ?? "" })
       .bind(to: name)
+      .addDisposableTo(disposeBag)
+    
+    exodiaInteractor.currentProperty
+      .asObservable()
+      .map({ $0?.type ?? "" })
+      .bind(to: type)
+      .addDisposableTo(disposeBag)
+    
+    exodiaInteractor.currentProperty
+      .asObservable()
+      .map({ $0?.key ?? "" })
+      .bind(to: key)
+      .addDisposableTo(disposeBag)
+    
+    exodiaInteractor.currentProperty
+      .asObservable()
+      .map({ $0?.defaultValue ?? "" })
+      .bind(to: defaultValue)
+      .addDisposableTo(disposeBag)
+    
+    name.map({ [exodiaInteractor = exodiaInteractor] in
+      "__MODEL_\((exodiaInteractor.currentModel.value?.name ?? "").uppercased())_PROPERTY_\($0.uppercased())__"
+    })
+      .bind(to: id)
       .addDisposableTo(disposeBag)
   }
 }

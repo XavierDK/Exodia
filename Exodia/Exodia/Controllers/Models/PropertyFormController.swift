@@ -20,6 +20,9 @@ class PropertyFormController: NSViewController {
   
   @IBOutlet weak var idTextField: NSTextField!
   @IBOutlet weak var nameTextField: NSTextField!
+  @IBOutlet weak var typeTextField: NSTextField!
+  @IBOutlet weak var keyTextField: NSTextField!
+  @IBOutlet weak var defaultValueTextField: NSTextField!
   @IBOutlet weak var validateButton: NSButton!
   @IBOutlet weak var newButton: NSButton!
   @IBOutlet weak var deleteButton: NSButton!
@@ -66,6 +69,41 @@ class PropertyFormController: NSViewController {
       .debug()
       .distinctUntilChanged()
       .bind(to: nameTextField.rx.text)
+      .addDisposableTo(disposeBag)
+    
+    typeTextField.rx.text
+      .skip(1)
+      .filterNil()
+      .bind(to: viewModel.type)
+      .addDisposableTo(disposeBag)
+    
+    viewModel.type
+      .debug()
+      .distinctUntilChanged()
+      .bind(to: typeTextField.rx.text)
+      .addDisposableTo(disposeBag)
+    
+    keyTextField.rx.text
+      .skip(1)
+      .filterNil()
+      .bind(to: viewModel.key)
+      .addDisposableTo(disposeBag)
+    
+    viewModel.key
+      .debug()
+      .distinctUntilChanged()
+      .bind(to: keyTextField.rx.text)
+      .addDisposableTo(disposeBag)
+    
+    defaultValueTextField.rx.text
+      .skip(1)
+      .bind(to: viewModel.defaultValue)
+      .addDisposableTo(disposeBag)
+    
+    viewModel.defaultValue
+      .debug()
+      .distinctUntilChanged()
+      .bind(to: defaultValueTextField.rx.text)
       .addDisposableTo(disposeBag)
     
     viewModel.saveEnabled

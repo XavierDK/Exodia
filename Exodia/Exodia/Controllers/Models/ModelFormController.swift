@@ -20,6 +20,9 @@ class ModelFormController: NSViewController {
   
   @IBOutlet weak var idTextField: NSTextField!
   @IBOutlet weak var nameTextField: NSTextField!
+  @IBOutlet weak var realmButton: NSButton!
+  @IBOutlet weak var structButton: NSButton!
+  @IBOutlet weak var classButton: NSButton!
   @IBOutlet weak var tableView: NSTableView!
   @IBOutlet weak var validateButton: NSButton!
   @IBOutlet weak var newButton: NSButton!
@@ -73,6 +76,44 @@ class ModelFormController: NSViewController {
       .bind(to: nameTextField.rx.text)
       .addDisposableTo(disposeBag)
     
+    realmButton.rx.state
+      .map({ $0 == 1 })
+      .bind(to: viewModel.hasRealm)
+      .addDisposableTo(disposeBag)
+    
+    viewModel.hasRealm
+      .distinctUntilChanged()
+      .map({ ($0) ? (1) : (0) })
+      .bind(to: realmButton.rx.state)
+      .addDisposableTo(disposeBag)
+    
+    viewModel.isClass
+      .distinctUntilChanged()
+      .map({ ($0) ? (1) : (0) })
+      .bind(to: classButton.rx.state)
+      .addDisposableTo(disposeBag)
+    
+    viewModel.isClass
+      .distinctUntilChanged()
+      .map({ ($0) ? (0) : (1) })
+      .bind(to: structButton.rx.state)
+      .addDisposableTo(disposeBag)
+    
+    viewModel.hasRealm
+      .map(!)
+      .bind(to: structButton.rx.isEnabled)
+      .addDisposableTo(disposeBag)
+    
+    viewModel.hasRealm
+      .map(!)
+      .bind(to: classButton.rx.isEnabled)
+      .addDisposableTo(disposeBag)
+    
+    viewModel.hasRealm
+      .filter({ $0 })
+      .bind(to: viewModel.isClass)
+      .addDisposableTo(disposeBag)
+    
     viewModel.saveEnabled
       .drive(validateButton.rx.isEnabled)
       .addDisposableTo(disposeBag)
@@ -108,6 +149,18 @@ class ModelFormController: NSViewController {
       })
       .addDisposableTo(disposeBag)
   }
+  
+  @IBAction func modelType(_ sender: NSButton) {
+    
+    if sender.tag == 0 {
+      print("Struct")
+      viewModel.isClass.onNext(false)
+    }
+    else {
+      print("Class")
+      viewModel.isClass.onNext(true)
+    }
+  }
 }
 
 extension ModelFormController: NSTableViewDataSource, NSTableViewDelegate {
@@ -126,6 +179,15 @@ extension ModelFormController: NSTableViewDataSource, NSTableViewDelegate {
     }
     else if tableColumn == tableView.tableColumns[1] {
       view.textField!.stringValue = property.name ?? ""
+    }
+    else if tableColumn == tableView.tableColumns[2] {
+      view.textField!.stringValue = property.type ?? ""
+    }
+    else if tableColumn == tableView.tableColumns[3] {
+      view.textField!.stringValue = property.key ?? ""
+    }
+    else if tableColumn == tableView.tableColumns[4] {
+      view.textField!.stringValue = property.defaultValue ?? ""
     }
     
     return view

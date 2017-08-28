@@ -11,7 +11,7 @@
 		258B59D51F4C7F22007889A5 /* Exodia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 258B59D41F4C7F22007889A5 /* Exodia.swift */; };
 		258B59D71F4C7F3B007889A5 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 258B59D61F4C7F3B007889A5 /* Model.swift */; };
 		258B59D91F4C7F45007889A5 /* Property.swift in Sources */ = {isa = PBXBuildFile; fileRef = 258B59D81F4C7F45007889A5 /* Property.swift */; };
-		258B59DC1F4C82A8007889A5 /* ConfigFileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 258B59DB1F4C82A8007889A5 /* ConfigFileService.swift */; };
+		258B59DC1F4C82A8007889A5 /* GeneratorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 258B59DB1F4C82A8007889A5 /* GeneratorService.swift */; };
 		258B59DF1F4C84CC007889A5 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 258B59DE1F4C84CC007889A5 /* RootViewController.swift */; };
 		258B59E11F4C8610007889A5 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 258B59E01F4C8610007889A5 /* AppKit.framework */; };
 		258B59E41F4C8BD8007889A5 /* MainBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 258B59E31F4C8BD8007889A5 /* MainBuilder.swift */; };
@@ -22,6 +22,11 @@
 		258B59F31F4C913A007889A5 /* SplitController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 258B59F21F4C913A007889A5 /* SplitController.swift */; };
 		258B59F61F4D6E78007889A5 /* ExodiaInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 258B59F51F4D6E78007889A5 /* ExodiaInteractor.swift */; };
 		258B59F81F4D80BF007889A5 /* ModelFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 258B59F71F4D80BF007889A5 /* ModelFormViewModel.swift */; };
+		25934B411F5461DF00447515 /* ServiceListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25934B401F5461DF00447515 /* ServiceListController.swift */; };
+		25934B431F5461FA00447515 /* ServiceFormController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25934B421F5461FA00447515 /* ServiceFormController.swift */; };
+		25934B461F54622C00447515 /* ServiceListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25934B451F54622C00447515 /* ServiceListViewModel.swift */; };
+		25934B481F54623F00447515 /* ServiceFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25934B471F54623F00447515 /* ServiceFormViewModel.swift */; };
+		25934B4A1F54660100447515 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25934B491F54660100447515 /* Service.swift */; };
 		25DA067D1F4B1CB90019D87C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25DA067C1F4B1CB90019D87C /* AppDelegate.swift */; };
 		25DA06811F4B1CB90019D87C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 25DA06801F4B1CB90019D87C /* Assets.xcassets */; };
 		25DA06841F4B1CB90019D87C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 25DA06821F4B1CB90019D87C /* Main.storyboard */; };
@@ -30,10 +35,11 @@
 
 /* Begin PBXFileReference section */
 		256ECE141F4DE2BF002885C7 /* PropertyFormViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PropertyFormViewModel.swift; path = ViewModels/Models/PropertyFormViewModel.swift; sourceTree = "<group>"; };
+		256ECE181F4ECD89002885C7 /* StructModel.swift */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 4; name = StructModel.swift; path = Engine/Templates/Models/StructModel.swift; sourceTree = "<group>"; };
 		258B59D41F4C7F22007889A5 /* Exodia.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Exodia.swift; path = Engine/Models/Exodia.swift; sourceTree = "<group>"; };
 		258B59D61F4C7F3B007889A5 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Model.swift; path = Engine/Models/Model.swift; sourceTree = "<group>"; };
 		258B59D81F4C7F45007889A5 /* Property.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Property.swift; path = Engine/Models/Property.swift; sourceTree = "<group>"; };
-		258B59DB1F4C82A8007889A5 /* ConfigFileService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConfigFileService.swift; path = Engine/Services/ConfigFileService.swift; sourceTree = "<group>"; };
+		258B59DB1F4C82A8007889A5 /* GeneratorService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GeneratorService.swift; path = Engine/Services/GeneratorService.swift; sourceTree = "<group>"; };
 		258B59DE1F4C84CC007889A5 /* RootViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RootViewController.swift; path = Controllers/RootViewController.swift; sourceTree = "<group>"; };
 		258B59E01F4C8610007889A5 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		258B59E31F4C8BD8007889A5 /* MainBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainBuilder.swift; path = Builders/MainBuilder.swift; sourceTree = "<group>"; };
@@ -44,6 +50,13 @@
 		258B59F21F4C913A007889A5 /* SplitController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SplitController.swift; path = Controllers/SplitController.swift; sourceTree = "<group>"; };
 		258B59F51F4D6E78007889A5 /* ExodiaInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExodiaInteractor.swift; path = Interactors/ExodiaInteractor.swift; sourceTree = "<group>"; };
 		258B59F71F4D80BF007889A5 /* ModelFormViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ModelFormViewModel.swift; path = ViewModels/Models/ModelFormViewModel.swift; sourceTree = "<group>"; };
+		25934B401F5461DF00447515 /* ServiceListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ServiceListController.swift; path = Controllers/Services/ServiceListController.swift; sourceTree = "<group>"; };
+		25934B421F5461FA00447515 /* ServiceFormController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ServiceFormController.swift; path = Controllers/Services/ServiceFormController.swift; sourceTree = "<group>"; };
+		25934B451F54622C00447515 /* ServiceListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ServiceListViewModel.swift; path = ViewModels/Services/ServiceListViewModel.swift; sourceTree = "<group>"; };
+		25934B471F54623F00447515 /* ServiceFormViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ServiceFormViewModel.swift; path = ViewModels/Services/ServiceFormViewModel.swift; sourceTree = "<group>"; };
+		25934B491F54660100447515 /* Service.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Service.swift; path = Engine/Models/Service.swift; sourceTree = "<group>"; };
+		25BB9E571F50782500C8D001 /* ClassModel.swift */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 4; name = ClassModel.swift; path = Engine/Templates/Models/ClassModel.swift; sourceTree = "<group>"; };
+		25BB9E591F50783D00C8D001 /* RealmModel.swift */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 4; name = RealmModel.swift; path = Engine/Templates/Models/RealmModel.swift; sourceTree = "<group>"; };
 		25DA06791F4B1CB90019D87C /* Exodia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Exodia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		25DA067C1F4B1CB90019D87C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		25DA06801F4B1CB90019D87C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -85,9 +98,28 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		256ECE161F4ECD23002885C7 /* Templates */ = {
+			isa = PBXGroup;
+			children = (
+				256ECE171F4ECD2A002885C7 /* Models */,
+			);
+			name = Templates;
+			sourceTree = "<group>";
+		};
+		256ECE171F4ECD2A002885C7 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				256ECE181F4ECD89002885C7 /* StructModel.swift */,
+				25BB9E571F50782500C8D001 /* ClassModel.swift */,
+				25BB9E591F50783D00C8D001 /* RealmModel.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
 		258B59D21F4C7EFE007889A5 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
+				256ECE161F4ECD23002885C7 /* Templates */,
 				258B59D31F4C7F05007889A5 /* Models */,
 				258B59DA1F4C8281007889A5 /* Services */,
 				258B59F41F4D6E51007889A5 /* Interactors */,
@@ -101,6 +133,7 @@
 				258B59D41F4C7F22007889A5 /* Exodia.swift */,
 				258B59D61F4C7F3B007889A5 /* Model.swift */,
 				258B59D81F4C7F45007889A5 /* Property.swift */,
+				25934B491F54660100447515 /* Service.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -108,7 +141,7 @@
 		258B59DA1F4C8281007889A5 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				258B59DB1F4C82A8007889A5 /* ConfigFileService.swift */,
+				258B59DB1F4C82A8007889A5 /* GeneratorService.swift */,
 			);
 			name = Services;
 			sourceTree = "<group>";
@@ -116,6 +149,7 @@
 		258B59DD1F4C84B4007889A5 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				25934B3F1F5461C500447515 /* Services */,
 				258B59E51F4C8D46007889A5 /* Models */,
 				258B59DE1F4C84CC007889A5 /* RootViewController.swift */,
 				258B59F21F4C913A007889A5 /* SplitController.swift */,
@@ -144,6 +178,7 @@
 		258B59EC1F4C8E88007889A5 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				25934B441F54620B00447515 /* Services */,
 				258B59ED1F4C8EC6007889A5 /* Models */,
 			);
 			name = ViewModels;
@@ -167,6 +202,24 @@
 			name = Interactors;
 			sourceTree = "<group>";
 		};
+		25934B3F1F5461C500447515 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				25934B401F5461DF00447515 /* ServiceListController.swift */,
+				25934B421F5461FA00447515 /* ServiceFormController.swift */,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
+		25934B441F54620B00447515 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				25934B451F54622C00447515 /* ServiceListViewModel.swift */,
+				25934B471F54623F00447515 /* ServiceFormViewModel.swift */,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
 		25DA06701F4B1CB90019D87C = {
 			isa = PBXGroup;
 			children = (
@@ -188,9 +241,9 @@
 		25DA067B1F4B1CB90019D87C /* Exodia */ = {
 			isa = PBXGroup;
 			children = (
+				258B59DD1F4C84B4007889A5 /* Controllers */,
 				258B59EC1F4C8E88007889A5 /* ViewModels */,
 				258B59E21F4C8BC8007889A5 /* Builders */,
-				258B59DD1F4C84B4007889A5 /* Controllers */,
 				258B59D21F4C7EFE007889A5 /* Engine */,
 				25DA067C1F4B1CB90019D87C /* AppDelegate.swift */,
 				25DA06801F4B1CB90019D87C /* Assets.xcassets */,
@@ -297,9 +350,11 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-Exodia/Pods-Exodia-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Action/Action.framework",
 				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
+				"${BUILT_PRODUCTS_DIR}/PathKit/PathKit.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxOptional/RxOptional.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/Stencil/Stencil.framework",
 				"${BUILT_PRODUCTS_DIR}/Swinject/Swinject.framework",
 				"${BUILT_PRODUCTS_DIR}/SwinjectAutoregistration/SwinjectAutoregistration.framework",
 			);
@@ -307,9 +362,11 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Action.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjectMapper.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PathKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxOptional.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Stencil.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swinject.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwinjectAutoregistration.framework",
 			);
@@ -343,16 +400,21 @@
 				258B59F31F4C913A007889A5 /* SplitController.swift in Sources */,
 				258B59D91F4C7F45007889A5 /* Property.swift in Sources */,
 				256ECE151F4DE2BF002885C7 /* PropertyFormViewModel.swift in Sources */,
-				258B59DC1F4C82A8007889A5 /* ConfigFileService.swift in Sources */,
+				25934B481F54623F00447515 /* ServiceFormViewModel.swift in Sources */,
+				258B59DC1F4C82A8007889A5 /* GeneratorService.swift in Sources */,
 				258B59E91F4C8D64007889A5 /* ModelFormController.swift in Sources */,
 				258B59DF1F4C84CC007889A5 /* RootViewController.swift in Sources */,
 				258B59E41F4C8BD8007889A5 /* MainBuilder.swift in Sources */,
+				25934B411F5461DF00447515 /* ServiceListController.swift in Sources */,
+				25934B431F5461FA00447515 /* ServiceFormController.swift in Sources */,
 				258B59F81F4D80BF007889A5 /* ModelFormViewModel.swift in Sources */,
+				25934B461F54622C00447515 /* ServiceListViewModel.swift in Sources */,
 				258B59F61F4D6E78007889A5 /* ExodiaInteractor.swift in Sources */,
 				25DA067D1F4B1CB90019D87C /* AppDelegate.swift in Sources */,
 				258B59EB1F4C8D72007889A5 /* PropertyFormController.swift in Sources */,
 				258B59E71F4C8D59007889A5 /* ModelListController.swift in Sources */,
 				258B59D51F4C7F22007889A5 /* Exodia.swift in Sources */,
+				25934B4A1F54660100447515 /* Service.swift in Sources */,
 				258B59EF1F4C8EDA007889A5 /* ModelListViewModel.swift in Sources */,
 				258B59D71F4C7F3B007889A5 /* Model.swift in Sources */,
 			);

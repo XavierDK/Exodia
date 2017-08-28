@@ -14,6 +14,8 @@ struct Model: Mappable {
   var id: String?
   var name: String?
   var properties: [Property] = []
+  var isClass: Bool = false
+  var hasRealm: Bool = false
   
   init() {}
   
@@ -26,5 +28,7 @@ struct Model: Mappable {
     id          <- map["id"]
     name        <- map["name"]
     properties  <- map["properties"]
+    isClass     <- map["isClass"]
+    hasRealm    <- map["hasRealm"]
   }
 }

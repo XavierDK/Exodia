@@ -11,13 +11,30 @@ import Swinject
 import SwinjectAutoregistration
 import RxSwift
 
-let container = Container()
+var container: Container = {
+  
+  let container = Container()
+  container.autoregister(ModelListViewModelType.self, initializer: ModelListViewModel.init)
+  container.autoregister(ModelFormViewModelType.self, initializer: ModelFormViewModel.init)
+  container.autoregister(PropertyFormViewModelType.self, initializer: PropertyFormViewModel.init)
+  
+  container.autoregister(ServiceListViewModelType.self, initializer: ServiceListViewModel.init)
+  container.autoregister(ServiceFormViewModelType.self, initializer: ServiceFormViewModel.init)
+  
+  container.autoregister(GeneratorServiceType.self, initializer: GeneratorService.init)
+  
+  container.autoregister(ExodiaInteractorType.self, initializer: ExodiaInteractor.init).inObjectScope(.container)
+  
+  return container
+}()
 
 enum MainBuilder {
   
   case modelList
   case modelForm
   case propertyForm
+  case serviceList
+  case serviceForm
   
   static func build(controller: NSViewController) {
     type(forController: controller)?.build(controller: controller)
@@ -25,17 +42,10 @@ enum MainBuilder {
   
   static func exodia() -> ExodiaInteractorType {
     
-    DispatchQueue.once(token: "__ASSEMBLY__") {
-      assembly()
-    }
     return container.resolve(ExodiaInteractorType.self)!
   }
   
   private func build(controller: NSViewController) {
-    
-    DispatchQueue.once(token: "__ASSEMBLY__") {
-      MainBuilder.assembly()
-    }
     
     switch self {
     case .modelList:
@@ -44,6 +54,10 @@ enum MainBuilder {
       buildModelForm(controller)
     case .propertyForm:
       buildPropertyForm(controller)
+    case .serviceList:
+      buildServiceList(controller)
+    case .serviceForm:
+      buildServiceForm(controller)
     }
   }
   
@@ -56,6 +70,10 @@ enum MainBuilder {
       return .modelForm
     case is PropertyFormController:
       return .propertyForm
+    case is ServiceListController:
+      return .serviceList
+    case is ServiceFormController:
+      return .serviceForm
     default:
       return nil
     }
@@ -76,43 +94,13 @@ enum MainBuilder {
     (controller as! PropertyFormController).viewModel = container.resolve(PropertyFormViewModelType.self)!
   }
   
-  private static func assembly() {
+  private func buildServiceList(_ controller: NSViewController) {
     
-    container.autoregister(ModelListViewModelType.self, initializer: ModelListViewModel.init)
-    container.autoregister(ModelFormViewModelType.self, initializer: ModelFormViewModel.init)
-    container.autoregister(PropertyFormViewModelType.self, initializer: PropertyFormViewModel.init)
-    
-    container.autoregister(ConfigFileServiceType.self, initializer: ConfigFileService.init)
-    
-    container.autoregister(ExodiaInteractorType.self, initializer: ExodiaInteractor.init).inObjectScope(.container)
-  }
-}
-
-public extension DispatchQueue {
-  private static var _onceTracker = [String]()
-  
-  public class func once(file: String = #file, function: String = #function, line: Int = #line, block:(Void)->Void) {
-    let token = file + ":" + function + ":" + String(line)
-    once(token: token, block: block)
+    (controller as! ServiceListController).viewModel = container.resolve(ServiceListViewModelType.self)!
   }
   
-  /**
-   Executes a block of code, associated with a unique token, only once.  The code is thread safe and will
-   only execute the code once even in the presence of multithreaded calls.
-   
-   - parameter token: A unique reverse DNS style name such as com.vectorform.<name> or a GUID
-   - parameter block: Block to execute once
-   */
-  public class func once(token: String, block:(Void)->Void) {
-    objc_sync_enter(self)
-    defer { objc_sync_exit(self) }
+  private func buildServiceForm(_ controller: NSViewController) {
     
-    
-    if _onceTracker.contains(token) {
-      return
-    }
-    
-    _onceTracker.append(token)
-    block()
+    (controller as! ServiceFormController).viewModel = container.resolve(ServiceFormViewModelType.self)!
   }
 }
